@@ -1,0 +1,2 @@
+Simple python log(mostly for log4j) analyzer.
+Main idea - filtration of whole log file by several criteria to simplify log reading.
