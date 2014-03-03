@@ -18,8 +18,8 @@ def get_filename():
 def get_dest_filename(source_filename):
     """
     Calculates destination filename by source filename
-    @param source_filename:
-    @return: this realization returnst 'dest' + source filename
+    @param source_filename: string with source filename
+    @return: this realization returns 'dest_' + source filename
     """
     return "dest_" + source_filename
 
