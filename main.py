@@ -4,6 +4,11 @@ __author__ = 'EvilKhaosKat'
 
 
 def get_filename():
+    """
+    From sys.args returns first parameter - source filename
+    @return: first parameter - source filename, or value by default
+    "qa_transfer.log"
+    """
     args = sys.argv
 
     #for arg in args:
