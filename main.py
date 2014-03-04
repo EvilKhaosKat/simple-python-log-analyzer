@@ -2,7 +2,7 @@ import sys
 
 __author__ = 'EvilKhaosKat'
 
-
+#TODO named parameters instead of hardcoded order
 def get_filename():
     """
     From sys.args returns first parameter - source filename
