@@ -1,4 +1,5 @@
 import sys
+from filters.ContentFilter import ContentFilter, ContentSettings
 
 __author__ = 'EvilKhaosKat'
 
@@ -38,13 +39,14 @@ filename = get_filename()
 source_file = open(filename)
 dest_file = open(get_dest_filename(filename), 'w')
 
-prev_line_added = False
-for line in source_file:
-    if need_to_append_line(line, prev_line_added):
-        dest_file.write(line)
-        prev_line_added = True
-    else:
-        prev_line_added = False
+#TODO fabric methods for creating filters instances with settings
+content_filter_settings = ContentSettings(["routingPathStrategy"])
+content_filter = ContentFilter(settings=content_filter_settings)
+
+result = content_filter.apply(source_file)
+
+for line in result:
+    dest_file.write(line)
 
 source_file.close()
 dest_file.close()
