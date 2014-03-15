@@ -20,6 +20,21 @@ def get_filename():
     else:
         return "qa_transfer.log"
 
+def get_strings_for_searching():
+    """
+    Temporal method for parsing paramaters of launching
+    @return: list of lines - what should be found in log file
+    """
+    result = []
+
+    args = sys.argv
+    args = args[2:]
+
+    for arg in args:
+        result.append(arg)
+
+    return result
+
 
 def get_dest_filename(source_filename):
     """
@@ -40,7 +55,7 @@ source_file = open(filename)
 dest_file = open(get_dest_filename(filename), 'w')
 
 #TODO fabric methods for creating filters instances with settings
-content_filter_settings = ContentSettings(["routingPathStrategy"])
+content_filter_settings = ContentSettings(get_strings_for_searching())
 content_filter = ContentFilter(settings=content_filter_settings)
 
 result = content_filter.apply(source_file)
