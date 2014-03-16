@@ -1,44 +1,51 @@
 import sys
 from filters.ContentFilter import ContentFilter, ContentSettings
-
-#TODO named parameters instead of hardcoded order
 from filters.TimeFilter import TimeSettings, TimeFilter
+
+PARAM_FILENAME = "-filename"
+PARAM_TEMPLATES = "-templates"
+PARAM_HOURS_OFFSET = "-hours_offset"
 
 
 def get_filename():
     """
     From sys.args returns first parameter - source filename
-    @return: first parameter - source filename, or value by default
-    "qa_transfer.log"
+    @return: first parameter - source filename
     """
-    args = sys.argv
+    args = sys.argv[1:]
 
     #for arg in args:
     #    print(arg, sep="\n")
 
-    if len(args) > 1:
-        return args[1]
-    else:
-        return "qa_transfer.log"
+    for argument in args:
+        if argument.startswith(PARAM_FILENAME):
+            return argument.split("=")[1]
+
+    raise Exception("Filename wasn't specified.")
 
 def get_strings_for_searching():
     """
-    Temporal method for parsing paramaters of launching
+    Temporal method for parsing parameters of launching.
     @return: list of lines - what should be found in log file
     """
-    result = []
+    args = sys.argv[1:]
 
-    args = sys.argv
-    args = args[3:]
+    for argument in args:
+        if argument.startswith(PARAM_TEMPLATES):
+            values = argument.split("=")[1]
+            return values.split(";")
 
-    for arg in args:
-        result.append(arg)
-
-    return result
+    return []
 
 def get_hours_offset():
-    args = sys.argv
-    return int(args[2])
+    args = sys.argv[1:]
+
+    for argument in args:
+        if argument.startswith(PARAM_HOURS_OFFSET):
+            value = argument.split("=")[1]
+            return int(value)
+
+    return None
 
 
 def get_dest_filename(source_filename):
@@ -50,9 +57,11 @@ def get_dest_filename(source_filename):
     return "dest_" + source_filename
 
 
-print("Simple realization. Assumed that first parameter of launching - filename for parsing (or qa_transfer.log by default)")
-print("2 parameter - offset in hours from current moment")
-print("3...n parameters - templates to be found in line to be added in result file. For example it could be name of the classes.")
+print("Supported input parameters:")
+print(PARAM_FILENAME)
+print(PARAM_TEMPLATES)
+print(PARAM_HOURS_OFFSET)
+
 print("")
 
 filename = get_filename()
@@ -63,27 +72,35 @@ print("Source file '{0}' opened.".format(filename))
 dest_filename = get_dest_filename(filename)
 dest_file = open(dest_filename, 'w')
 print("File destination - '{0}'".format(dest_filename))
+print("")
+
+result = source_file
 
 #TODO fabric methods for creating filters instances with settings
+
 strings_for_searching = get_strings_for_searching()
 print("Strings for searching:" + str(strings_for_searching))
+if strings_for_searching:
+    content_filter_settings = ContentSettings(strings_for_searching)
+    content_filter = ContentFilter(settings=content_filter_settings)
+    result = content_filter.apply(result)
+    print("Content filter applied.")
+    print("")
 
-content_filter_settings = ContentSettings(strings_for_searching)
-content_filter = ContentFilter(settings=content_filter_settings)
-
-first_date = TimeSettings.get_date_by_offset(get_hours_offset())
-print("First date for logging:" + str(first_date))
-
-time_filter_settings = TimeSettings(first_date)
-time_filter = TimeFilter(settings=time_filter_settings)
-
-result = content_filter.apply(source_file)
-print("Content filter applied.")
-result = time_filter.apply(result)
-print("Time filter applied.")
+hours_offset = get_hours_offset()
+print("Hours offset:" + str(hours_offset))
+if hours_offset:
+    first_date = TimeSettings.get_date_by_offset(hours_offset)
+    print("First date for logging:" + str(first_date))
+    time_filter_settings = TimeSettings(first_date)
+    time_filter = TimeFilter(settings=time_filter_settings)
+    result = time_filter.apply(result)
+    print("Time filter applied.")
+    print("")
 
 for line in result:
     dest_file.write(line)
+print("--------------------")
 print("Result file created.")
 
 source_file.close()
