@@ -22,7 +22,6 @@ class TimeFilter(Filter):
 
         return result
 
-
     def get_date_from_line(self, line):
         """
         Try to parse suitable format log entry in to date object<br>
@@ -79,12 +78,20 @@ class TimeSettings(Settings):
         #print(cur_date.strftime("%d.%m.%y %H:%M"))
         return cur_date.replace(hour=hour-hours_offset)
 
-# class TestDateCalculation(unittest.TestCase):
-#     def get_date_from_line(self, line):
-#         self.assertEquals
+
+class TestTimeFilter(unittest.TestCase):
+    def test_get_date_from_line(self):
+        time_filter = TimeFilter()
+        date = time_filter.get_date_from_line("=16.03.2014 18:31:14.892")
+
+        self.assertEquals(date.day, 16)
+        self.assertEquals(date.month, 3)
+        self.assertEquals(date.year, 2014)
+        self.assertEquals(date.hour, 18)
+        self.assertEquals(date.minute, 31)
 
 if __name__ == '__main__':
-    pass
-    #TimeFilter.get_date_from_line("=27.02.2014 18:31:13.384")
+    print("self-testing for TimeFilter.py")
+    unittest.main()
 
 
