@@ -63,7 +63,7 @@ class TimeSettings(Settings):
     @staticmethod
     def get_date_by_offset(hours_offset):
         """
-
+        Calculates date from current minus offset hours
         @param hours_offset: hours offset for current date
         @return: first suitable date
         """
@@ -93,5 +93,3 @@ class TestTimeFilter(unittest.TestCase):
 if __name__ == '__main__':
     print("self-testing for TimeFilter.py")
     unittest.main()
-
-

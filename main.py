@@ -9,8 +9,8 @@ PARAM_HOURS_OFFSET = "-hours_offset"
 
 def get_filename():
     """
-    From sys.args returns first parameter - source filename
-    @return: first parameter - source filename
+    From sys.args returns named parameter -filename
+    @return: source filename
     """
     args = sys.argv[1:]
 
@@ -61,7 +61,6 @@ print("Supported input parameters:")
 print(PARAM_FILENAME)
 print(PARAM_TEMPLATES)
 print(PARAM_HOURS_OFFSET)
-
 print("")
 
 filename = get_filename()
@@ -100,6 +99,7 @@ if hours_offset:
 
 for line in result:
     dest_file.write(line)
+
 print("--------------------")
 print("Result file created.")
 

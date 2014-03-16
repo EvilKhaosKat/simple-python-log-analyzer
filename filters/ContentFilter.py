@@ -4,7 +4,7 @@ from filters.Filter import Filter, Settings, is_line_separate_record
 class ContentFilter(Filter):
     def apply(self, source):
         """
-        Perform filtration logic
+        Performs filtration logic
         @rtype : iter
         @param source: iterable of strings, that represents content for filtration
         @return: iterable of strings, result of applying logic of filtration
