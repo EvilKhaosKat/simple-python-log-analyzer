@@ -2,18 +2,6 @@ from filters.Filter import Filter, Settings, is_line_separate_record
 
 
 class ContentFilter(Filter):
-    settings = None
-
-    def __init__(self, settings=None):
-        """
-        Content filter constructor
-        @param settings:
-        @return:
-        """
-        super().__init__()
-        #print("ContentFilter" + str(settings))
-        self.settings = settings
-
     def apply(self, source):
         """
         Perform filtration logic
