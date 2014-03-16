@@ -15,6 +15,7 @@ class Filter:
         """
         self.settings = settings
 
+    #TODO take applying logic from content filter, part with multiline + extra function that performs choosing logic itself
     def apply(self, source):
         """
         Perform filtration logic
