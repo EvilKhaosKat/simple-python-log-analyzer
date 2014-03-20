@@ -20,7 +20,7 @@ class ContentFilter(Filter):
                         result.append(line)
                         previous_line_suitable = True
                         break
-                previous_line_suitable = False
+                    previous_line_suitable = False
             else:
                 if self.settings.multiple_lines_support and previous_line_suitable:
                     result.append(line)
