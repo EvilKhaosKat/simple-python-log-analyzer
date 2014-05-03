@@ -1,5 +1,6 @@
 import sys
 from filters.ContentFilter import ContentFilter, ContentSettings
+from filters.HtmlFilter import HtmlFilter
 from filters.ReplacesFilter import ReplacesSettings, ReplacesFilter
 from filters.TimeFilter import TimeSettings, TimeFilter
 
@@ -7,7 +8,7 @@ PARAM_FILENAME = "-filename"
 PARAM_TEMPLATES = "-templates"
 PARAM_HOURS_OFFSET = "-hours_offset"
 PARAM_REPLACE = "-replace"
-#PARAM_IS_HTML = "-is_html"
+PARAM_IS_HTML = "-is_html"
 
 
 def get_filename():
@@ -58,20 +59,37 @@ def get_replaces():
 
     for argument in args:
         if argument.startswith(PARAM_REPLACE):
-            value = argument.split("=")[1]
+            print("argument:" + argument)
+            value = argument[argument.find("=") + 1:]
+            print("value:" + str(value))
             replaces.update({key:value for key, value in [replace.split("::") for replace in value.split(";")]})
             #I've made it just for lulz
             #one line of code that splits 'test1::new_test1;test2::new_test2' and makes dict
 
     return replaces
 
-def get_dest_filename(source_filename):
+def get_is_html():
+    args = sys.argv[1:]
+
+    for argument in args:
+        if argument.startswith(PARAM_IS_HTML):
+            return True
+
+    return False
+
+def get_dest_filename(source_filename, is_html):
     """
     Calculates destination filename by source filename
     @param source_filename: string with source filename
+    @param is_html: if it's html file - add .html in the end
     @return: this realization returns 'dest_' + source filename
     """
-    return "dest_" + source_filename
+    filename = "dest_" + source_filename
+
+    if is_html:
+        return filename + ".html"
+    else:
+        return filename
 
 
 print("Supported input parameters:")
@@ -79,15 +97,19 @@ print(PARAM_FILENAME)
 print(PARAM_TEMPLATES)
 print(PARAM_HOURS_OFFSET)
 print(PARAM_REPLACE)
-#print(PARAM_IS_HTML)
+print(PARAM_IS_HTML)
 print("")
+
+is_html = False
 
 filename = get_filename()
 
 source_file = open(filename)
 print("Source file '{0}' opened.".format(filename))
 
-dest_filename = get_dest_filename(filename)
+is_html = get_is_html()
+
+dest_filename = get_dest_filename(filename, is_html)
 dest_file = open(dest_filename, 'w')
 print("File destination - '{0}'".format(dest_filename))
 print("")
@@ -103,7 +125,7 @@ if strings_for_searching:
     content_filter = ContentFilter(settings=content_filter_settings)
     result = content_filter.apply(result)
     print("Content filter applied.")
-    print("")
+print("")
 
 hours_offset = get_hours_offset()
 print("Hours offset:" + str(hours_offset))
@@ -114,7 +136,7 @@ if hours_offset:
     time_filter = TimeFilter(settings=time_filter_settings)
     result = time_filter.apply(result)
     print("Time filter applied.")
-    print("")
+print("")
 
 replaces = get_replaces()
 print("Replaces:" + str(replaces))
@@ -123,6 +145,13 @@ if replaces:
     replaces_filter = ReplacesFilter(settings=replaces_settings)
     result = replaces_filter.apply(result)
     print("Replaces filter applied.")
+print("")
+
+print("Is html:" + str(is_html))
+if is_html:
+    html_filter = HtmlFilter()
+    result = html_filter.apply(result)
+    print("HTML filter applied.")
     print("")
 
 for line in result:
