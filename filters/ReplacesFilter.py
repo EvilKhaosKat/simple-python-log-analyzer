@@ -17,5 +17,8 @@ class ReplacesSettings(Settings):
     replaces = {}
 
     def __init__(self, replaces):
-        super().__init__()
+        """
+        @param replaces dictionary 'old:new' values to be changed in file
+        @return
+        """
         self.replaces = replaces
