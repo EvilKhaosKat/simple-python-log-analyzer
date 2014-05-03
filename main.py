@@ -1,10 +1,13 @@
 import sys
 from filters.ContentFilter import ContentFilter, ContentSettings
+from filters.ReplacesFilter import ReplacesSettings, ReplacesFilter
 from filters.TimeFilter import TimeSettings, TimeFilter
 
 PARAM_FILENAME = "-filename"
 PARAM_TEMPLATES = "-templates"
 PARAM_HOURS_OFFSET = "-hours_offset"
+PARAM_REPLACE = "-replace"
+#PARAM_IS_HTML = "-is_html"
 
 
 def get_filename():
@@ -23,6 +26,7 @@ def get_filename():
 
     raise Exception("Filename wasn't specified.")
 
+#filters initialization
 def get_strings_for_searching():
     """
     Temporal method for parsing parameters of launching.
@@ -47,6 +51,19 @@ def get_hours_offset():
 
     return None
 
+def get_replaces():
+    replaces = {}
+
+    args = sys.argv[1:]
+
+    for argument in args:
+        if argument.startswith(PARAM_REPLACE):
+            value = argument.split("=")[1]
+            replaces.update({key:value for key, value in [replace.split("::") for replace in value.split(";")]})
+            #I've made it just for lulz
+            #one line of code that splits 'test1::new_test1;test2::new_test2' and makes dict
+
+    return replaces
 
 def get_dest_filename(source_filename):
     """
@@ -61,6 +78,8 @@ print("Supported input parameters:")
 print(PARAM_FILENAME)
 print(PARAM_TEMPLATES)
 print(PARAM_HOURS_OFFSET)
+print(PARAM_REPLACE)
+#print(PARAM_IS_HTML)
 print("")
 
 filename = get_filename()
@@ -95,6 +114,15 @@ if hours_offset:
     time_filter = TimeFilter(settings=time_filter_settings)
     result = time_filter.apply(result)
     print("Time filter applied.")
+    print("")
+
+replaces = get_replaces()
+print("Replaces:" + str(replaces))
+if replaces:
+    replaces_settings = ReplacesSettings(replaces)
+    replaces_filter = ReplacesFilter(settings=replaces_settings)
+    result = replaces_filter.apply(result)
+    print("Replaces filter applied.")
     print("")
 
 for line in result:
