@@ -7,6 +7,7 @@ class HtmlFilter(Filter):
 
         for line in source:
             result.append(line)
+            result.append("<br>")
 
         result.append("\n</html>")
 

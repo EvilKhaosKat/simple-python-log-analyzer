@@ -1,5 +1,6 @@
 import sys
 from filters.ContentFilter import ContentFilter, ContentSettings
+from filters.DeltaTimeFilter import DeltaTimeSettings, DeltaTimeFilter
 from filters.HtmlFilter import HtmlFilter
 from filters.ReplacesFilter import ReplacesSettings, ReplacesFilter
 from filters.TimeFilter import TimeSettings, TimeFilter
@@ -9,6 +10,7 @@ PARAM_TEMPLATES = "-templates"
 PARAM_HOURS_OFFSET = "-hours_offset"
 PARAM_REPLACE = "-replace"
 PARAM_IS_HTML = "-is_html"
+PARAM_TIME_DELTA_SEPARATION = "-time_delta_separation"
 
 
 def get_filename():
@@ -59,9 +61,7 @@ def get_replaces():
 
     for argument in args:
         if argument.startswith(PARAM_REPLACE):
-            print("argument:" + argument)
             value = argument[argument.find("=") + 1:]
-            print("value:" + str(value))
             replaces.update({key:value for key, value in [replace.split("::") for replace in value.split(";")]})
             #I've made it just for lulz
             #one line of code that splits 'test1::new_test1;test2::new_test2' and makes dict
@@ -76,6 +76,17 @@ def get_is_html():
             return True
 
     return False
+
+def get_time_delta_separation():
+    args = sys.argv[1:]
+
+    for argument in args:
+        if argument.startswith(PARAM_TIME_DELTA_SEPARATION):
+            value = argument.split("=")[1]
+            return int(value)
+
+    return None
+
 
 def get_dest_filename(source_filename, is_html):
     """
@@ -94,19 +105,20 @@ def get_dest_filename(source_filename, is_html):
 
 print("Supported input parameters:")
 print(PARAM_FILENAME)
-print(PARAM_TEMPLATES)
+print(PARAM_TEMPLATES + " | ;-separated strings to be found in file")
 print(PARAM_HOURS_OFFSET)
-print(PARAM_REPLACE)
+print(PARAM_REPLACE + " | with format old::new;old1::new1")
 print(PARAM_IS_HTML)
+print(PARAM_TIME_DELTA_SEPARATION + " | value in seconds")
 print("")
 
-is_html = False
 
 filename = get_filename()
 
 source_file = open(filename)
 print("Source file '{0}' opened.".format(filename))
 
+is_html = False
 is_html = get_is_html()
 
 dest_filename = get_dest_filename(filename, is_html)
@@ -152,7 +164,17 @@ if is_html:
     html_filter = HtmlFilter()
     result = html_filter.apply(result)
     print("HTML filter applied.")
-    print("")
+print("")
+
+time_delta_separation = get_time_delta_separation()
+print("Delta time separation: %s seconds" % time_delta_separation)
+if time_delta_separation:
+    delta_time_settings = DeltaTimeSettings(time_delta_separation, is_html)
+    delta_time_filter = DeltaTimeFilter(settings=delta_time_settings)
+    result = delta_time_filter.apply(result)
+    print("Delta time filter applied.")
+print("")
+
 
 for line in result:
     dest_file.write(line)
