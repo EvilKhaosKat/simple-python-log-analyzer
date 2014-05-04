@@ -76,7 +76,10 @@ class TimeSettings(Settings):
         # minute = cur_date.minute
 
         #print(cur_date.strftime("%d.%m.%y %H:%M"))
-        return cur_date.replace(hour=hour-hours_offset)
+
+        delta = datetime.timedelta(hours=hours_offset)
+
+        return cur_date - delta
 
 
 class TestTimeFilter(unittest.TestCase):
