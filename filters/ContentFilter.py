@@ -35,7 +35,7 @@ class ContentSettings(Settings):
     templates = []
     multiple_lines_support = True
 
-    def __init__(self, templates, multiple_lines_support = True):
+    def __init__(self, templates, multiple_lines_support=True):
         """
 
         @param templates: list of strings to be mentioned in suitable line
