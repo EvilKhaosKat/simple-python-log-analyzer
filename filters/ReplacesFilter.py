@@ -8,7 +8,8 @@ class ReplacesFilter(Filter):
 
         for line in source:
             for old, new in self.settings.replaces.items():
-                result.append(line.replace(old, new))
+                line = line.replace(old,new)
+            result.append(line)
 
         return result
 
