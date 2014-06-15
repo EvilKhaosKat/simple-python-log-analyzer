@@ -85,7 +85,7 @@ class TimeSettings(Settings):
         return cur_date - delta
 
     def __str__(self, *args, **kwargs):
-        return 'first_date:' + self.first_date
+        return 'first_date:' + str(self.first_date)
 
 
 class TestTimeFilter(unittest.TestCase):
