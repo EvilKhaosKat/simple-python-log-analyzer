@@ -18,23 +18,29 @@ class DeltaTimeFilter(Filter):
                 #print("")
                 if delta_date > self.settings.time_delta:
                     #print("add separator")
-
-                    if self.settings.is_html:
-                        result.append("<hr>")
-                    else:
-                        result.append("-"*80)
-                        result.append("\n")
-
+                    result.append(self.settings.separator)
+                    result.append("\n")
                 previous_date = current_date
-
             result.append(line)
 
         return result
 
 
 class DeltaTimeSettings(Settings):
-    def __init__(self, time_delta_separation, is_html):
-        self.time_delta_separation = time_delta_separation
-        self.is_html = is_html
+    time_delta = None
+    separator = None
+
+    def __init__(self, raw_settings):
+        time_delta_separation, self.separator = self.parse_raw_settings(raw_settings)
 
         self.time_delta = datetime.timedelta(seconds=time_delta_separation)
+
+    def parse_raw_settings(self, raw_settings):
+        seconds = raw_settings['seconds']
+        separator = raw_settings.get('separator')
+
+        return seconds, separator if separator else '-'*80
+
+    def __str__(self, *args, **kwargs):
+        return 'time_delta:' + str(self.time_delta)
+

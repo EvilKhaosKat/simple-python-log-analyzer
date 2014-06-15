@@ -1,1 +1,5 @@
-python main.py -filename=test.log -is_html -replace=DEBUG::"<font color=red>DEBUG</font>" -time_delta_separation=10 
+python main.py -filename=qa_transfer.log -settings_filename=settings.json
+
+
+#-filename=qa_transfer.log -settings_filename=settings.json
+#-filename=qa_transfer.log -replace=DEBUG::"<font color=red>DEBUG</font>" -is_html -hours_offset=100 -time_delta_separation=10

@@ -24,9 +24,13 @@ class Filter:
         """
         return source
 
+    def __str__(self, *args, **kwargs):
+        return '(Filter:' + self.__class__.__name__ + ' Settings:' + str(self.settings) + ')'
+
 
 class Settings:
-    pass
+    def parse_raw_settings(self, raw_settings):
+        pass
 
 
 class FilterTest(unittest.TestCase):
