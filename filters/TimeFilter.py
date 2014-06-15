@@ -56,10 +56,12 @@ class TimeFilter(Filter):
 class TimeSettings(Settings):
     first_date = None
 
-    def __init__(self, first_date):
+    def __init__(self, raw_settings):
         super().__init__()
-        self.first_date = first_date
+        self.first_date = self.get_date_by_offset(self.parse_raw_settings(raw_settings))
 
+    def parse_raw_settings(self, raw_settings):
+        return int(raw_settings)
 
     @staticmethod
     def get_date_by_offset(hours_offset):
@@ -81,6 +83,9 @@ class TimeSettings(Settings):
         delta = datetime.timedelta(hours=hours_offset)
 
         return cur_date - delta
+
+    def __str__(self, *args, **kwargs):
+        return 'first_date:' + self.first_date
 
 
 class TestTimeFilter(unittest.TestCase):

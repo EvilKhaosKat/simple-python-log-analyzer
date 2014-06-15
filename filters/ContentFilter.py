@@ -46,4 +46,13 @@ class ContentSettings(Settings):
         self.templates = templates
         self.multiple_lines_support = multiple_lines_support
 
-        #print(self.templates)
+    def parse_raw_settings(self, raw_settings):
+        """
+        @return: list of lines - what should be found in log file
+        """
+        return raw_settings.split(";")
+
+    def __str__(self, *args, **kwargs):
+        return 'templates:' + self.templates
+
+
