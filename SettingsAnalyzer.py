@@ -19,12 +19,12 @@ class SettingsAnalyzer:
     def __init__(self, settings_filename):
         self.settings_filename = settings_filename
 
-        print("Supported input parameters:")
-        print(self.PARAM_TEMPLATES + " | ;-separated strings to be found in file")
+        print("Supported settings:")
+        print(self.PARAM_TEMPLATES + ": ;-separated strings to be found in file")
         print(self.PARAM_HOURS_OFFSET)
-        print(self.PARAM_REPLACE + " | with format old::new;old1::new1")
+        print(self.PARAM_REPLACE + ": with format old::new;old1::new1")
         print(self.PARAM_IS_HTML)
-        print(self.PARAM_TIME_DELTA_SEPARATION + " | value in seconds")
+        print(self.PARAM_TIME_DELTA_SEPARATION + ": {'seconds':NN, 'separator':'---'}")
         print("")
 
     def parse_settings(self):

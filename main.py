@@ -52,31 +52,39 @@ def get_dest_filename(source_filename, is_html):
     else:
         return filename
 
+def perform_analysis(filename, settings_filename, output_filename):
+    print("Main parameters")
+    print(PARAM_FILENAME)
+    print(PARAM_OUTPUT_FILENAME)
+    print(PARAM_SETTINGS_FILENAME)
+    print("")
 
-filename = get_filename()
-source_file = open(filename)
-print("Source file '{0}' opened.".format(filename))
-result = source_file
+    source_file = open(filename)
+    print("Source file '{0}' opened.".format(filename))
+    result = source_file
 
-settings_filename = get_settings_filename()
-print("settings_filename:" + settings_filename)
-print("")
-settings_analyzer = SettingsAnalyzer(settings_filename)
-filters_sequence = settings_analyzer.parse_settings()
-result = filters_sequence.apply(result)
+    print("settings_filename:" + settings_filename)
+    print("")
+    settings_analyzer = SettingsAnalyzer(settings_filename)
+    filters_sequence = settings_analyzer.parse_settings()
+    result = filters_sequence.apply(result)
 
-dest_filename = get_dest_filename(filename, filters_sequence.is_html)
-dest_file = open(dest_filename, 'w')
-print("")
-print("File destination - '{0}'".format(dest_filename))
-print("")
+    dest_filename = output_filename if output_filename else get_dest_filename(filename, filters_sequence.is_html)
+    dest_file = open(dest_filename, 'w')
+    print("")
+    print("File destination - '{0}'".format(dest_filename))
+    print("")
 
-for line in result:
-    dest_file.write(line)
+    for line in result:
+        dest_file.write(line)
 
-print("--------------------")
-print("Result file created.")
+    print("--------------------")
+    print("Result file created.")
 
-source_file.close()
-dest_file.close()
-print("Files closed.")
+    source_file.close()
+    dest_file.close()
+    print("Files closed.")
+
+
+if __name__ == "__main__":
+    perform_analysis(get_filename(), get_settings_filename(), None)
