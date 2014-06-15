@@ -1,2 +1,0 @@
-class AnalyzerSettings:
-    pass

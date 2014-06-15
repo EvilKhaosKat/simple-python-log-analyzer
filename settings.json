@@ -1,0 +1,4 @@
+{
+    "time_delta_separation": {"seconds":10},
+    "replace": "DEBUG::<font color=red>DEBUG</font>"
+} 
