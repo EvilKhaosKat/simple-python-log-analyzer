@@ -1,4 +1,4 @@
-python main.py -filename=qa_transfer.log -settings_filename=settings.json
+python main.py -filename=transfer.log -settings_filename=settings.json
 
 
 #-filename=qa_transfer.log -settings_filename=settings.json

@@ -1,5 +1,7 @@
 import sys
 from SettingsAnalyzer import SettingsAnalyzer
+#import statprof
+
 
 PARAM_FILENAME = "-filename"
 PARAM_OUTPUT_FILENAME = '-output_filename'
@@ -66,6 +68,8 @@ class Main:
             return filename
 
     def perform_analysis(self):
+        # statprof.start()
+
         print("Main parameters")
         print(PARAM_FILENAME)
         print(PARAM_OUTPUT_FILENAME)
@@ -98,7 +102,21 @@ class Main:
         dest_file.close()
         print("Files closed.")
 
+        # statprof.stop()
+        # statprof.display()
+
 
 if __name__ == "__main__":
     main = Main(Main.get_filename(), Main.get_settings_filename(), None)
     main.perform_analysis()
+
+    # embedded profiler
+    # import profile
+    # profile.run('main.perform_analysis()', sort=1)
+    #
+    # pycallgraph, nice graph
+    #from pycallgraph import PyCallGraph
+    # from pycallgraph.output import GraphvizOutput
+
+    # with PyCallGraph(output=GraphvizOutput()):
+    #     main.perform_analysis()
