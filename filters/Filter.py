@@ -2,7 +2,8 @@ import re
 import unittest
 
 def is_line_separate_record(line):
-    return re.match("\A=\d\d\.\d\d", line)
+    #return re.match("\A=\d\d\.\d\d", line) #too slow
+    return line[0] == '=' and line[3] == '.'
 
 class Filter:
     settings = None
